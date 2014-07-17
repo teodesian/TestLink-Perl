@@ -1449,6 +1449,11 @@ Those will have a key 'testsuites' with a list of it's child testsuites.
 These testsuites will themselves have 'testsuites' and 'test' keys describing their children.
 Both the test and testsuite hashes will have an 'attachment' parameter with the base64 encoded attachment as a string if the get_attachments option is passed.
 
+WARNING: I have observed some locking related issues with cases/suites etc.
+Sometimes calls to get tests/suites during dumps fails, sometimes subsequent calls to getTestSuites/getTestCasesForTestSuite fail.
+If you are experiencing issues, try to put some wait() in there until it starts behaving right.
+Alternatively, just XML dump the whole project and use XML::Simple or somesuch to get the project tree.
+
 =over 4
 
 =item INTEGER C<PROJECT NAME> (optional) - desired project
@@ -1471,11 +1476,10 @@ sub dump {
     my ($self,$project,$attachment,$flat) = @_;
     confess("Object parameters must be called by an instance") unless ref($self);
 
-    $self->_cacheProjectTree($project,$flat);
+    my $res = $self->_cacheProjectTree($project,$flat);
 
-    return $self->{'flattree'} if $flat;
-    return $self->{'testtree'} if !$project;
-    foreach my $pj (@{$self->{'testtree'}}) {
+    return $res if !$project || $flat;
+    foreach my $pj (@{$res}) {
         return $pj if $pj->{'name'} eq $project;
     }
     croak "COULD NOT DUMP, SOMETHING HORRIBLY WRONG";
@@ -1521,7 +1525,8 @@ sub _cacheProjectTree {
 
     #Keep this for simple searches in the future.
     $self->{'flattree'} = clone \@flattener;
-    return if $flat;
+    my @debuglist = map {$_->{'tests'}} @flattener;
+    return $self->{'flattree'} if $flat;
 
     #The following algorithm relies implicitly on pass-by-reference.
     #So we have a flat array of testsuites we want to map into parent-child relationships.
@@ -1592,9 +1597,12 @@ __END__
 
 =head1 SEE ALSO
 
-L<Test::More>
 L<XMLRPC::Lite>
 
 =head1 AUTHOR
 
-George Baugh (gbaugh@cpanel.net)
+George Baugh (george@troglodyne.net)
+
+=head1 SPECIAL THANKS
+
+cPanel, Inc. graciously funded the initial work on this project.
