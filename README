@@ -1,0 +1,4 @@
+TestLink::API is an interface to the TestLink Test Management Software's XMLRPC API.
+http://testlink.org/
+API Docs:
+http://jetmore.org/john/misc/phpdoc-testlink193-api/TestlinkAPI/TestlinkXMLRPCServer.html
