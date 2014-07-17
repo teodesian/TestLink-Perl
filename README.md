@@ -6,7 +6,7 @@ Perl Interface to TestLink XMLAPI
 
 Doesn't implement every method provided (yet), just the ones *I* needed:
 
-* Making Projects,Suites,Tests,Plans and Projects
+* Making Projects,Suites,Tests,Plans and Builds
 * Getting the same
 * Setting test run statuses and execution attachments
 * Dumping the entire test tree.
