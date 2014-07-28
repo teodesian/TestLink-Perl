@@ -25,14 +25,6 @@ sub generate_uid {
 }
 
 my $tl = TestLink::API->new('http://not.here','not_valid');
-#use JSON::XS;
-#print encode_json($tl->dump('cPanel & WHM'));
-#diag explain $tl->dump('19GYjUN');
-#diag explain $tl->dump('19GYjUN',0,1);
-#diag explain $tl->dump('cPanel & WHM');
-#diag explain $tl->dump('Manage2/Store');
-#die;
-
 #Test input validation
 
 #Call instance methods as class and vice versa
@@ -53,19 +45,25 @@ foreach my $method (@{$methods[0]}) {
     like( exception {TestLink::API->$method}, qr/.*called by an instance.*/ , "Calling $method requires an instance");
 }
 
-#1. Create test project.
+#Conditional tests - no way I'm writing a mock for this garbage
 note("WARNING! Do not run the following tests against production testlink databases unless you have direct DB access!");
 note("TestLink's API cannot delete any test data, so you will have to do this yourself!");
 note("You will now be asked for credentials to point this test at some TestLink Installation.");
 note("If you provide no values within 45 seconds, the tests will be skipped."); #TODO use a mock rather than skipping if we don't provide this info
 my $apiurl = $ENV{'TESTLINK_SERVER_ADDR'};
-$apiurl = prompt("Please provide the TestLink API URL",undef,15) unless $apiurl;
+note "Please type your TestLink API URL - you have 15 seconds:" unless $apiurl;
+$apiurl = prompt("",undef,15) unless $apiurl;
+print"\n" unless $apiurl;
 my $apikey = $ENV{'TESTLINK_API_KEY'};
-prompt("Please provide the Testlink API Key",undef,15) unless $apikey;
-my $author_name = prompt("Please provide your TL username",undef,15);
+note "Please type your TestLink API Key - you have 15 seconds:" unless $apikey;
+prompt("",undef,15) unless $apikey;
+print"\n" unless $apikey;
+note "Please type your TestLink username - you have 15 seconds:";
+my $author_name = prompt("",undef,15);
+print"\n";
 
 SKIP: {
-    skip("User did not provide API endpoint & user to test.",36) if (!$apiurl || !$apikey || !$author_name);
+    skip("User did not provide API endpoint & user to test.",34) if (!$apiurl || !$apikey || !$author_name);
     $tl = TestLink::API->new($apiurl,$apikey);
 
     my $test_project_name = generate_uid();
