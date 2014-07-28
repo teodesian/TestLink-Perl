@@ -1,6 +1,6 @@
 package TestLink::API;
 {
-    $TestLink::API::VERSION = '0.004';
+    $TestLink::API::VERSION = '0.005';
 }
 
 
@@ -54,9 +54,7 @@ use XMLRPC::Lite;
 
 =head1 CONSTRUCTOR
 
-=over 4
-
-=item B<new (api_url, key)>
+=head2 B<new (api_url, key)>
 
 Creates new C<TestLink::API> object.
 
@@ -71,8 +69,6 @@ Creates new C<TestLink::API> object.
 Returns C<TestLink::API> object if login is successful.
 
     my $tl = TestLink::API->new('http://tl.test/testlink/lib/api/xmlrpc/v1/xmlrpc.php', 'gobbledygook123');
-
-=back
 
 =cut
 
@@ -134,9 +130,7 @@ sub AUTOLOAD {
 
 =head1 CREATE METHODS
 
-=over 4
-
-=item B<createTestPlan (name, project, [notes, active, public])>
+=head2 B<createTestPlan (name, project, [notes, active, public])>
 
 Creates new Test plan with given name in the given project.
 
@@ -157,8 +151,6 @@ Creates new Test plan with given name in the given project.
 Returns (integer) test plan ID if creation is successful.
 
     my $tpid = $tl->createTestPlan('shock&awe', 'enduringfreedom');
-
-=back
 
 =cut
 
@@ -189,9 +181,7 @@ sub createTestPlan {
     return 0;
 }
 
-=over 4
-
-=item B<createBuild (test_plan_id, name, [notes])>
+=head2 B<createBuild (test_plan_id, name, [notes])>
 
 Creates new 'Build' (test run in common parlance) from given test plan having given name and notes.
 
@@ -208,8 +198,6 @@ Creates new 'Build' (test run in common parlance) from given test plan having gi
 Returns true if case addition is successful, false otherwise.
 
     $tl->createBuild(1234, "Bossin' up", 'Crushing our enemies, seeing them driven before us and hearing the lamentations of their support engineers.');
-
-=back
 
 =cut
 
@@ -234,9 +222,7 @@ sub createBuild {
     return 0;
 }
 
-=over 4
-
-=item B<createTestSuite (project_id, name, [details, parent_testsuite_id, order])>
+=head2 B<createTestSuite (project_id, name, [details, parent_testsuite_id, order])>
 
 Creates new TestSuite (folder of tests) in the database of test specifications under given project id having given name and details.
 Optionally, can have a parent test suite (this is an analog to a hierarchical file tree after all) and what order to have this suite be amongst it's peers.
@@ -258,8 +244,6 @@ Optionally, can have a parent test suite (this is an analog to a hierarchical fi
 Returns (integer) build ID on success, false otherwise.
 
     $tl->createTestSuite(1, 'broken tests', 'Tests that should be reviewed', 2345, -1);
-
-=back
 
 =cut
 
@@ -289,9 +273,7 @@ sub createTestSuite {
     return 0;
 }
 
-=over 4
-
-=item B<createTestProject (name, case_prefix, [notes, options, active, public])>
+=head2 B<createTestProject (name, case_prefix, [notes, options, active, public])>
 
 Creates new Project (Database of testsuites/tests) with given name and case prefix.
 Optionally, can have notes, options, set the project as active/inactive and public/private.
@@ -315,8 +297,6 @@ Optionally, can have notes, options, set the project as active/inactive and publ
 Returns (integer) project ID on success, false otherwise.
 
     $tl->createTestProject('Widgetronic 4000', 'Tests for the whiz-bang new product', {'inventoryEnabled=>true}, true, true);
-
-=back
 
 =cut
 
@@ -349,9 +329,7 @@ sub createTestProject {
 
 }
 
-=over 4
-
-=item B<createTestCase (name, test_suite_id, test_project_id, author, summary, steps, preconditions, execution, order)>
+=head2 B<createTestCase (name, test_suite_id, test_project_id, author, summary, steps, preconditions, execution, order)>
 
 Creates new test case with given test suite id and project id.
 Author, Summary and Steps are mandatory for reasons that should be obvious to any experienced QA professional.
@@ -383,8 +361,6 @@ Returns (HASHREF) with Test Case ID and Test Case External ID on success, false 
 
     $tl->createTestCase('Verify Whatsit Throbs at correct frequency', 123, 456, 'Gnaeus Pompieus Maximus', 'Make sure throbber on Whatsit doesn't work out of harmony with other throbbers', '1. Connect measurement harness. 2. ??? 3. PROFIT!', 'automated', 2);
 
-=back
-
 =cut
 
 sub createTestCase {
@@ -415,9 +391,7 @@ sub createTestCase {
 
 =head1 SETTER METHODS
 
-=over 4
-
-=item B<reportTCResult (case_id, test_plan_id, build_id, status, [platform, notes, bug id])>
+=head2 B<reportTCResult (case_id, test_plan_id, build_id, status, [platform, notes, bug id])>
 
 Report results of a test case with a given ID, plan and build ID.  Set case results to status given.
 Platform is mandatory if available, otherwise optional.
@@ -445,8 +419,6 @@ Returns project ID on success, false otherwise.
 
     $tl->reportTCResult('T-1000', 7779311, 8675309, 'Tool Failure', 'Skynet Infiltration Model 1000', 'Catastrophic systems failure due to falling into vat of molten metal' 'TERMINATOR-2');
 
-=back
-
 =cut
 
 sub reportTCResult {
@@ -471,9 +443,7 @@ sub reportTCResult {
     return 0;
 }
 
-=over 4
-
-=item B<addTestCaseToTestPlan (test_plan_id, test_case_id, project_id, test_version, [sut_platform])>
+=head2 B<addTestCaseToTestPlan (test_plan_id, test_case_id, project_id, test_version, [sut_platform])>
 
 Creates new Test plan with given name in the given project.
 
@@ -498,8 +468,6 @@ Creates new Test plan with given name in the given project.
 Returns true if case addition is successful.
 
     $tl->addTestCaseToTestPlan(666, 'cp-90210', 121, '3.11', 'OS2/WARP', 3, 1);
-
-=back
 
 =cut
 
@@ -526,9 +494,7 @@ sub addTestCaseToTestPlan {
     return 0;
 }
 
-=over 4
-
-=item B<uploadExecutionAttachment (execution_id,filename,mimetype,content,[title,description])>
+=head2 B<uploadExecutionAttachment (execution_id,filename,mimetype,content,[title,description])>
 
 Uploads the provided file and associates it with the given execution.
 
@@ -551,8 +517,6 @@ Uploads the provided file and associates it with the given execution.
 Returns true if attachment addition is successful.
 
     $tl->uploadExecutionAttachment(1234, 'moo.txt', 'text/cow', APR::Base64::encode('MOO MOO MOOOOOO'), 'MOO', 'Test observed deranged bleatings of domestic ungulates, please investigate.');
-
-=back
 
 =cut
 
@@ -577,9 +541,7 @@ sub uploadExecutionAttachment {
     return 0;
 }
 
-=over 4
-
-=item B<uploadTestCaseAttachment (case_id,filename,mimetype,content,[title,description])>
+=head2 B<uploadTestCaseAttachment (case_id,filename,mimetype,content,[title,description])>
 
 Uploads the provided file and associates it with the given execution.
 
@@ -602,8 +564,6 @@ Uploads the provided file and associates it with the given execution.
 Returns true if attachment addition is successful.
 
     $tl->uploadTestCaseAttachment(1234, 'doStuff.t', 'text/perl', APR::Base64::encode($slurped_file_content), 'doStuff.t', 'Test File.');
-
-=back
 
 =cut
 
@@ -631,17 +591,13 @@ sub uploadTestCaseAttachment {
 
 =head1 GETTER METHODS
 
-=over 4
-
-=item B<getProjects ()>
+=head2 B<getProjects ()>
 
 Get all available projects
 
 Returns array of project definition hashes, false otherwise.
 
     $projects = $tl->getProjects;
-
-=back
 
 =cut
 
@@ -673,9 +629,7 @@ sub getProjects {
     return 0;
 }
 
-=over 4
-
-=item B<getProjectByName ($project)>
+=head2 B<getProjectByName ($project)>
 
 Gets some project definition hash by it's name
 
@@ -688,8 +642,6 @@ Gets some project definition hash by it's name
 Returns desired project def hash, false otherwise.
 
     $projects = $tl->getProjectByName('FunProject');
-
-=back
 
 =cut
 
@@ -710,9 +662,7 @@ sub getProjectByName {
     return 0;
 }
 
-=over 4
-
-=item B<getProjectByID ($project)>
+=head2 B<getProjectByID ($project)>
 
 Gets some project definition hash by it's ID
 
@@ -725,8 +675,6 @@ Gets some project definition hash by it's ID
 Returns desired project def hash, false otherwise.
 
     $projects = $tl->getProjectByID(222);
-
-=back
 
 =cut
 
@@ -748,9 +696,7 @@ sub getProjectByID {
 }
 
 
-=over 4
-
-=item B<getTLDTestSuitesForProject (project_id,get_tests)>
+=head2 B<getTLDTestSuitesForProject (project_id,get_tests)>
 
 Gets the testsuites in the top level of a project
 
@@ -764,8 +710,6 @@ Gets the testsuites in the top level of a project
 Returns desired testsuites' definition hashes, 0 on error and -1  when there is no such project.
 
     $projects = $tl->getTLDTestSuitesForProject(123);
-
-=back
 
 =cut
 
@@ -808,9 +752,7 @@ sub getTLDTestSuitesForProject {
     return $result->result;
 }
 
-=over 4
-
-=item B<getTestSuitesForTestSuite (testsuite_id,get_tests)>
+=head2 B<getTestSuitesForTestSuite (testsuite_id,get_tests)>
 
 Gets the testsuites that are children of the provided testsuite.
 
@@ -825,8 +767,6 @@ Returns desired testsuites' definition hashes, false otherwise.
 
     $suites = $tl->getTestSuitesForTestSuite(123);
     $suitesWithCases = $tl->getTestSuitesForTestSuite(123,1);
-
-=back
 
 =cut
 
@@ -868,9 +808,7 @@ sub getTestSuitesForTestSuite {
 }
 
 
-=over 4
-
-=item B<getTestSuitesByName (project_id,testsuite_name,do_regex)>
+=head2 B<getTestSuitesByName (project_id,testsuite_name,do_regex)>
 
 Gets the testsuite(s) that match given name inside of given project name.
 WARNING: this will slurp the enitre testsuite tree.  This can take a while on large projects, but the results are cached so that subsequent calls are not as onerous.
@@ -889,8 +827,6 @@ Returns desired testsuites' definition hashes, false otherwise.
 
     $suites = $tl->getTestSuitesByName(321, 'hugSuite');
     $suitesr = $tl->getTestSuitesByName(123, qr/^hug/, 1);
-
-=back
 
 =cut
 
@@ -917,9 +853,7 @@ sub getTestSuitesByName {
 
 }
 
-=over 4
-
-=item B<getTestSuiteByID (testsuite_id)>
+=head2 B<getTestSuiteByID (testsuite_id)>
 
 Gets the testsuite with the given ID.
 
@@ -932,8 +866,6 @@ Gets the testsuite with the given ID.
 Returns desired testsuite definition hash, false otherwise.
 
     $tests = $tl->getTestSuiteByID(123);
-
-=back
 
 =cut
 
@@ -953,9 +885,7 @@ sub getTestSuiteByID {
     return 0;
 }
 
-=over 4
-
-=item B<getTestCasesForTestSuite (testsuite_id,recurse,details)>
+=head2 B<getTestCasesForTestSuite (testsuite_id,recurse,details)>
 
 Gets the testsuites that match given name inside of given project name.
 
@@ -972,8 +902,6 @@ Gets the testsuites that match given name inside of given project name.
 Returns desired case definition hashes, false otherwise.
 
     $tests = $tl->getTestCasesForTestSuite(123,1,1);
-
-=back
 
 =cut
 
@@ -1001,9 +929,7 @@ sub getTestCasesForTestSuite {
     return [];
 }
 
-=over 4
-
-=item B<getTestCaseByExternalId (case_id,version)>
+=head2 B<getTestCaseByExternalId (case_id,version)>
 
 Gets the test case with the given external ID (e.g. projprefix-123) at provided version.
 
@@ -1018,8 +944,6 @@ Gets the test case with the given external ID (e.g. projprefix-123) at provided 
 Returns desired case definition hash, false otherwise.
 
     $case = $tl->getTestCaseByExternalId('eee-123');
-
-=back
 
 =cut
 
@@ -1040,9 +964,7 @@ sub getTestCaseByExternalId {
     return 0;
 }
 
-=over 4
-
-=item B<getTestCaseById (case_id,version)>
+=head2 B<getTestCaseById (case_id,version)>
 
 Gets the test case with the given internal ID at provided version.
 
@@ -1057,8 +979,6 @@ Gets the test case with the given internal ID at provided version.
 Returns desired case definition hash, false otherwise.
 
     $case = $tl->getTestCaseById(28474,5);
-
-=back
 
 =cut
 
@@ -1079,9 +999,7 @@ sub getTestCaseById {
     return 0;
 }
 
-=over 4
-
-=item B<getTestCaseByName (case_name,suite_name,project_name,tc_path_nameversion)>
+=head2 B<getTestCaseByName (case_name,suite_name,project_name,tc_path_nameversion)>
 
 Gets the test case with the given internal ID at provided version.
 
@@ -1102,8 +1020,6 @@ Gets the test case with the given internal ID at provided version.
 Returns desired case definition hash, false otherwise.
 
     $case = $tl->getTestCaseByName('nugCase','gravySuite','chickenProject');
-
-=back
 
 =cut
 
@@ -1126,9 +1042,7 @@ sub getTestCaseByName {
     return 0;
 }
 
-=over 4
-
-=item B<getTestCaseAttachments (case_ext_id)>
+=head2 B<getTestCaseAttachments (case_ext_id)>
 
 Gets the attachments for some case.
 
@@ -1141,8 +1055,6 @@ Gets the attachments for some case.
 Returns desired attachment definition hash, false otherwise.  Content key is the file base64 encoded.
 
     $att = $tl->getTestCaseAttachments('CP-222');
-
-=back
 
 =cut
 
@@ -1163,9 +1075,7 @@ sub getTestCaseAttachments {
     return 0;
 }
 
-=over 4
-
-=item B<getTestPlansForProject (project_id)>
+=head2 B<getTestPlansForProject (project_id)>
 
 Gets the test plans within given project id
 
@@ -1178,8 +1088,6 @@ Gets the test plans within given project id
 Returns desired test plan definition hashes, false otherwise.
 
     $plans = $tl->getTestPlansForProject(23);
-
-=back
 
 =cut
 
@@ -1199,9 +1107,7 @@ sub getTestPlansForProject {
     return 0;
 }
 
-=over 4
-
-=item B<getTestPlanByName (plan_name,project_name)>
+=head2 B<getTestPlanByName (plan_name,project_name)>
 
 Gets the test plan within given project name
 
@@ -1216,8 +1122,6 @@ Gets the test plan within given project name
 Returns desired test plan definition hash, false otherwise.
 
     $suites = $tl->getTestPlanByName('nugs','gravy');
-
-=back
 
 =cut
 
@@ -1239,9 +1143,7 @@ sub getTestPlanByName {
     return 0;
 }
 
-=over 4
-
-=item B<getBuildsForTestPlan (plan_id)>
+=head2 B<getBuildsForTestPlan (plan_id)>
 
 Gets the builds for given test plan
 
@@ -1254,8 +1156,6 @@ Gets the builds for given test plan
 Returns desired builds' definition hashes, false otherwise.
 
     $builds = $tl->getBuildsForTestPlan(1234);
-
-=back
 
 =cut
 
@@ -1275,9 +1175,7 @@ sub getBuildsForTestPlan {
     return 0;
 }
 
-=over 4
-
-=item B<getTestCasesForTestPlan (plan_id)>
+=head2 B<getTestCasesForTestPlan (plan_id)>
 
 Gets the cases in provided test plan
 
@@ -1294,8 +1192,6 @@ Returns desired tests' definition hashes sorted by parent test plan ID, false ot
 
     Example usage:
     $builds = $tl->getTestCasesForTestPlan(1234);
-
-=back
 
 =cut
 
@@ -1315,9 +1211,7 @@ sub getTestCasesForTestPlan {
     return 0;
 }
 
-=over 4
-
-=item B<getLatestBuildForTestPlan (plan_id)>
+=head2 B<getLatestBuildForTestPlan (plan_id)>
 
 Gets the latest build for the provided test plan
 
@@ -1330,8 +1224,6 @@ Gets the latest build for the provided test plan
 Returns desired build definition hash, false otherwise.
 
     $build = $tl->getLatestBuildForTestPlan(1234);
-
-=back
 
 =cut
 
@@ -1357,9 +1249,7 @@ sub getLatestBuildForTestPlan {
     return 0;
 }
 
-=over 4
-
-=item B<getBuildByName (build_name,project_id)>
+=head2 B<getBuildByName (build_name,project_id)>
 
 Gets the desired build in project id by name
 
@@ -1374,8 +1264,6 @@ Gets the desired build in project id by name
 Returns desired build definition hash, false otherwise.
 
     $build = $tl->getBuildByName('foo',1234);
-
-=back
 
 =cut
 
@@ -1396,9 +1284,7 @@ sub getBuildByName {
 
 =head1 REPORTING METHODS
 
-=over 4
-
-=item B<getTotalsForTestPlan (plan_id)>
+=head2 B<getTotalsForTestPlan (plan_id)>
 
 Gets the results summary for a test plan, even though what you really want is results by build/platform
 
@@ -1411,8 +1297,6 @@ Gets the results summary for a test plan, even though what you really want is re
 Returns Hash describing test results.
 
     $res = $tl->getTotalsForTestPlan(2322);
-
-=back
 
 =cut
 
@@ -1436,9 +1320,7 @@ sub getTotalsForTestPlan {
 
 =head1 EXPORT/IMPORT METHODS
 
-=over 4
-
-=item B<dump([project,get_attachments,flatten])>
+=head2 B<dump([project,get_attachments,flatten])>
 
 Return all info for all (or only the specified) projects.
 It will have the entire testsuite hierarchy and it's tests/attachments in an array of HASHREFs.
@@ -1454,6 +1336,8 @@ Sometimes calls to get tests/suites during dumps fails, sometimes subsequent cal
 If you are experiencing issues, try to put some wait() in there until it starts behaving right.
 Alternatively, just XML dump the whole project and use XML::Simple or somesuch to get the project tree.
 
+ALSO: Attachment getting is not enabled due to the underlying XMLRPC calls appearing not to work.  This option will be ignored until a workaround can be found.
+
 =over 4
 
 =item INTEGER C<PROJECT NAME> (optional) - desired project
@@ -1467,8 +1351,6 @@ Returns ARRAYREF describing everything.
     $ultradump = $tl->dump();
     $dumpWithAtts = $tl->dump('TestProject',1);
     $flatDump = $tl->dump('testProj',0,1);
-
-=back
 
 =cut
 

@@ -1,8 +1,10 @@
+use 5.010;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME              => "TestLink::API",
     VERSION_FROM      => "lib/TestLink/API.pm",
+    MIN_PERL_VERSION  => '5.010',
     #Not really sure which versions, but I will make them install via CPAN this way
     TEST_REQUIRES     => {
         "Test::More"       => 0,
