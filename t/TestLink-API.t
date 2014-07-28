@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 67;
+use Test::More tests => 66;
 use Test::Fatal;
 use TestLink::API;
 
@@ -166,7 +166,7 @@ SKIP: {
     #9-14?. Clean up auto-generated poo?  NOPE, no delete methods, YOLO
 
     #8. Test dumper
-    my $projdump = $tl->dump('19GYjUN');
+    my $projdump = $tl->dump($test_project_name);
     ok($projdump->{'testsuites'}->[0]->{'name'} eq $test_suite_name,"Dump gets TS correctly");
     ok($projdump->{'testsuites'}->[0]->{'tests'}->[0]->{'name'} eq $test_name,"Dump gets tests correctly");
     ok($projdump->{'testsuites'}->[0]->{'testsuites'}->[0]->{'name'} eq $child_test_suite_name,"Dump gets child TS correctly");

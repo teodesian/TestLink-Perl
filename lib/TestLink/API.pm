@@ -1,6 +1,6 @@
 package TestLink::API;
 {
-    $TestLink::API::VERSION = '0.002';
+    $TestLink::API::VERSION = '0.003';
 }
 
 
@@ -1477,6 +1477,7 @@ sub dump {
     confess("Object parameters must be called by an instance") unless ref($self);
 
     my $res = $self->_cacheProjectTree($project,$flat);
+    return [] if !$res;
 
     return $res if !$project || $flat;
     foreach my $pj (@{$res}) {
@@ -1527,7 +1528,14 @@ sub _cacheProjectTree {
     $self->{'flattree'} = clone \@flattener;
     my @debuglist = map {$_->{'tests'}} @flattener;
     return $self->{'flattree'} if $flat;
+    return $self->_expandTree($project,@flattener);
+}
 
+sub _expandTree {
+    my $self = shift;
+    confess("Object parameters must be called by an instance") unless ref($self);
+    my $project = shift;
+    my @flattener = @_;
     #The following algorithm relies implicitly on pass-by-reference.
     #So we have a flat array of testsuites we want to map into parent-child relationships.
     my ($i,$j);
@@ -1548,7 +1556,29 @@ sub _cacheProjectTree {
 
             #So, let's tail recurse over the testsuites.
             for ($i=0; $i < scalar(@{$self->{'testtree'}->[$j]->{'testsuites'}}); $i++) {
-                our $tailRecurseTSWalker;
+                my $tailRecurseTSWalker = sub  {
+                    my ($ts,$desired_ts) = @_;
+
+                    #Mark it down if we found it
+                    if ($ts->{'id'} eq $desired_ts->{'parent_id'}) {
+
+                        #Set the REF's 'testsuites' param, and quit searching
+                        $ts->{'testsuites'} = [] if !defined($ts->{'testsuites'});
+                        push(@{$ts->{'testsuites'}},$desired_ts);
+                        $desired_ts->{'found'} = 1;
+                        return;
+                    }
+
+                    #If there's already (nonblank) hierarchy in the passed TS, then WE HAVE TO GO DEEPER
+                    if (defined($ts->{'testsuites'}) && scalar(@{$desired_ts->{'testsuites'}})) {
+                        for (my $i=0; $i < scalar(@{$ts->{'testsuites'}}); $i++) {
+                            _tailRecurseTSWalker($ts->{'testsuites'}->[$i],$desired_ts);
+                        }
+                    }
+
+                    return;
+                };
+
                 &$tailRecurseTSWalker($self->{'testtree'}->[$j]->{'testsuites'}->[$i],$suite);
                 #OPTIMIZE: break out if we found it already
                 last if $suite->{'found'};
@@ -1563,33 +1593,8 @@ sub _cacheProjectTree {
             shift @flattener;
         }
     }
-
+    return $self->{'testtree'};
 }
-
-#Walk the entire child testsuite tree of passed ts, look for its parent desired_ts, and then set them in the passed TS.
-our $tailRecurseTSWalker = sub  {
-    my ($ts,$desired_ts) = @_;
-
-    #Mark it down if we found it
-    if ($ts->{'id'} eq $desired_ts->{'parent_id'}) {
-
-        #Set the REF's 'testsuites' param, and quit searching
-        $ts->{'testsuites'} = [] if !defined($ts->{'testsuites'});
-        push(@{$ts->{'testsuites'}},$desired_ts);
-        $desired_ts->{'found'} = 1;
-        return;
-    }
-
-    #If there's already (nonblank) hierarchy in the passed TS, then WE HAVE TO GO DEEPER
-    if (defined($ts->{'testsuites'}) && scalar(@{$desired_ts->{'testsuites'}})) {
-        for (my $i=0; $i < scalar(@{$ts->{'testsuites'}}); $i++) {
-            _tailRecurseTSWalker($ts->{'testsuites'}->[$i],$desired_ts);
-        }
-    }
-
-    return;
-};
-
 
 1;
 

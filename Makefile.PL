@@ -4,6 +4,14 @@ WriteMakefile(
     NAME              => "TestLink::API",
     VERSION_FROM      => "lib/TestLink/API.pm",
     #Not really sure which versions, but I will make them install via CPAN this way
+    TEST_REQUIRES     => {
+        "Test::More"       => 0,
+        "Test::Fatal"      => 0,
+        "MIME::Base64"     => 0,
+        "Class::Inspector" => 0,
+        "Prompt::Timeout"  => 0
+
+    },
     PREREQ_PM => {
         "Carp"                => 0,
         "Scalar::Util"        => 0,
