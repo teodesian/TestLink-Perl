@@ -20,5 +20,15 @@ WriteMakefile(
         "Data::Validate::URI" => 0,
         "Clone"               => 0,
         "XMLRPC::Lite"        => 0
+    },
+    META_MERGE => {
+        'meta-spec' => { version => 2 },
+         resources => {
+             repository => {
+                 type => 'git',
+                 url  => 'https://github.com/teodesian/TestLink-Perl.git',
+                 web  => 'https://github.com/teodesian/TestLink-Perl',
+             },
+         },
     }
 );
