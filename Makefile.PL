@@ -58,7 +58,7 @@ WriteMakefile(
         provides => {
             'TestLink::API' => {
                 file    => 'lib/TestLink/API.pm',
-                version => '0.006'
+                version => '0.007'
             }
         }
     }
