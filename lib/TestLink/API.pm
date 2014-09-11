@@ -407,7 +407,7 @@ Notes and Bug Ids for whatever tracker you use are optional.
 
 =item STRING C<STATUS> - Desired Test Status Code.  Codes not documented anywhere but in your cfg/const.inc.php of the TestLink Install.
 
-=item STRING C<PLATFORM> (semi-optional) - Relevant platform tested on.
+=item STRING C<PLATFORM> (semi-optional) - Relevant platform tested on.  Accepts both platform name and ID, if it looks_like_number, uses platform_id
 
 =item STRING C<NOTES> (optional) - Relevant information gleaned during testing process.
 
@@ -431,10 +431,17 @@ sub reportTCResult {
         testplanid => $plan_id,
         buildid    => $build_id,
         status     => $status,
-        platformid => $platform,
         notes      => $notes,
         bugid      => $bugid
     };
+
+    if (defined($platform) && !ref $platform) {
+        if (looks_like_number($platform)) {
+            $input->{'platformid'} = $platform;
+        } else {
+            $input->{'platformname'} = $platform;
+        }
+    }
 
     my $rpc = XMLRPC::Lite->proxy($self->apiurl);
     my $result = $rpc->call('tl.reportTCResult',$input);
