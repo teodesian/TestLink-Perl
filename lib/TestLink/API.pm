@@ -1,6 +1,6 @@
 package TestLink::API;
 {
-    $TestLink::API::VERSION = '0.008';
+    $TestLink::API::VERSION = '0.009';
 }
 
 

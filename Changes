@@ -1,2 +1,3 @@
 0.001-0.007: More or less the attainment of Kwalitee
 0.008 - Allow platform to be passed as ID or name in reportTCResult
+0.009 - Add POD tests
