@@ -5,3 +5,4 @@ Changes
 LICENSE
 lib/TestLink/API.pm
 t/TestLink-API.t
+t/pod.t
