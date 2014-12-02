@@ -1494,6 +1494,10 @@ __END__
 
 L<XMLRPC::Lite>
 
+=head1 REPOSITORY
+
+L<https://github.com/teodesian/TestLink-Perl>
+
 =head1 AUTHOR
 
 George Baugh <teodesian@cpan.org>
