@@ -1,3 +1,17 @@
-0.001-0.007: More or less the attainment of Kwalitee
-0.008 - Allow platform to be passed as ID or name in reportTCResult
-0.009 - Add POD tests
+Revision history for Perl module TestLink::API
+
+0.010 2014-12-?? TEODESIAN
+    - Reformatted Changes as per CPAN::Changes::Spec
+
+0.009 2014-11-28 TEODESIAN
+    - Add POD tests
+
+0.008 2014-09-15 TEODESIAN
+    - Allow platform to be passed as ID or name in reportTCResult
+
+0.007 2014-08-17 TEODESIAN
+    - from 0.002 to this release: the attainment of Kwalitee
+
+0.001 2014-07-25 TEODESIAN
+    - First release to CPAN
+
