@@ -2,6 +2,7 @@ Revision history for Perl module TestLink::API
 
 0.010 2014-12-?? TEODESIAN
     - Dist name was being set to TestLink::API instead of TestLink-API
+    - Added "use 5.010" to document required version of Perl.
     - Reformatted Changes as per CPAN::Changes::Spec
 
 0.009 2014-11-28 TEODESIAN

@@ -1,6 +1,6 @@
 package TestLink::API;
 {
-    $TestLink::API::VERSION = '0.009';
+    $TestLink::API::VERSION = '0.010';
 }
 
 
@@ -42,6 +42,7 @@ It is by no means exhaustively implementing every TestLink API function.  Design
 =cut
 
 
+use 5.010;
 use strict;
 use warnings;
 use Carp;
