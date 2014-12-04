@@ -1502,6 +1502,10 @@ L<https://github.com/teodesian/TestLink-Perl>
 
 George Baugh <teodesian@cpan.org>
 
+=head1 CONTRIBUTORS
+
+Neil Bowers <neil@bowers.com> - Fixed minor distribution issues for 0.010
+
 =head1 SPECIAL THANKS
 
 cPanel, Inc. graciously funded the initial work on this project.
