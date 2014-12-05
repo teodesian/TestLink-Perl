@@ -1,12 +1,7 @@
+# ABSTRACT: Provides an interface to TestLink's XMLRPC api via HTTP
+# PODNAME: TestLink::API
+
 package TestLink::API;
-{
-    $TestLink::API::VERSION = '0.010';
-}
-
-
-=head1 NAME
-
-TestLink::API - Provides an interface to TestLink's XMLRPC api via HTTP
 
 =head1 SYNOPSIS
 
@@ -40,7 +35,6 @@ Create methods assume desired entry provided is not already in the DB (TODO (aga
 It is by no means exhaustively implementing every TestLink API function.  Designed with TestLink 1.9.9, but will likely work on (some) other versions.
 
 =cut
-
 
 use 5.010;
 use strict;
@@ -1494,24 +1488,7 @@ __END__
 
 L<XMLRPC::Lite>
 
-=head1 REPOSITORY
-
-L<https://github.com/teodesian/TestLink-Perl>
-
-=head1 AUTHOR
-
-George Baugh <teodesian@cpan.org>
-
-=head1 CONTRIBUTORS
-
-Neil Bowers <neil@bowers.com> - Fixed minor distribution issues for 0.010
-
 =head1 SPECIAL THANKS
 
 cPanel, Inc. graciously funded the initial work on this project.
 
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2014 by George S. Baugh.
-
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
