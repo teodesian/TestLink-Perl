@@ -29,7 +29,7 @@ package TestLink::API;
 
 C<TestLink::API> provides methods to access an existing TestLink account.  You can then do things like look up tests, set statuses and create builds from lists of tests.
 The getter methods cache the test tree up to whatever depth is required by your getter calls.  This is to speed up automated creation/reading/setting of the test db based on existing automated tests.
-Cache expires at the end of script execution. (TODO memcache controlled by constructor, with create methods invalidating cache?)
+Cache expires at the end of script execution. (TODO use memcached controlled by constructor, with create methods invalidating cache?)
 Getter/setter methods that take args assume that the relevant project/testsuite/test/plan/build provided exists (TODO: use cache to check exists, provide more verbose error reason...), and returns false if not.
 Create methods assume desired entry provided is not already in the DB (TODO (again): use cache to check exists, provide more verbose error reason...), and returns false if not.
 It is by no means exhaustively implementing every TestLink API function.  Designed with TestLink 1.9.9, but will likely work on (some) other versions.
@@ -813,7 +813,7 @@ sub getTestSuitesForTestSuite {
 =head2 B<getTestSuitesByName (project_id,testsuite_name,do_regex)>
 
 Gets the testsuite(s) that match given name inside of given project name.
-WARNING: this will slurp the enitre testsuite tree.  This can take a while on large projects, but the results are cached so that subsequent calls are not as onerous.
+WARNING: this will slurp the entire testsuite tree.  This can take a while on large projects, but the results are cached so that subsequent calls are not as onerous.
 
 =over 4
 
@@ -861,7 +861,7 @@ Gets the testsuite with the given ID.
 
 =over 4
 
-=item STRING C<TESTSUITE_ID> - Testsuite ID.
+=item STRING C<TESTSUITE_ID> - TestSuite ID.
 
 =back
 
@@ -893,7 +893,7 @@ Gets the testsuites that match given name inside of given project name.
 
 =over 4
 
-=item STRING C<TESTSUITE_ID> - Testsuite ID.
+=item STRING C<TESTSUITE_ID> - TestSuite ID.
 
 =item BOOLEAN C<RECURSE> - Search testsuite tree recursively for tests below the provided testsuite
 
@@ -1026,7 +1026,7 @@ Returns desired case definition hash, false otherwise.
 =cut
 
 sub getTestCaseByName {
-    my ($self, $casename, $suitename, $projectname, $testcasepathname, $version) = @_;
+    my ($self, $casename, $suitename, $projectname, $testcasepathname) = @_;
     confess("Object parameters must be called by an instance") unless ref($self);
 
     my $input = {
@@ -1336,15 +1336,15 @@ Both the test and testsuite hashes will have an 'attachment' parameter with the 
 WARNING: I have observed some locking related issues with cases/suites etc.
 Sometimes calls to get tests/suites during dumps fails, sometimes subsequent calls to getTestSuites/getTestCasesForTestSuite fail.
 If you are experiencing issues, try to put some wait() in there until it starts behaving right.
-Alternatively, just XML dump the whole project and use XML::Simple or somesuch to get the project tree.
+Alternatively, just XML dump the whole project and use XML::Simple or your tool of choice to get the project tree.
 
 ALSO: Attachment getting is not enabled due to the underlying XMLRPC calls appearing not to work.  This option will be ignored until a workaround can be found.
 
 =over 4
 
 =item INTEGER C<PROJECT NAME> (optional) - desired project
-=item BOOLEAN C<GET ATTACHMENTS> (optional) - whether or not to get attachments.  Default false.
-=item BOOLEAN C<FLATTEN> (optional) - Whether to return a flattened structure (you will need to corellate parent to child yourself, but this is faster due to not walking the tree).  Preferred output for those not comfortable with doing tail recursion.
+=item BOOLEAN C<GET ATTACHMENTS> (optional) - whether or not to get attachments.  Default false. UNIMPLEMENTED.
+=item BOOLEAN C<FLATTEN> (optional) - Whether to return a flattened structure (you will need to correlate parent to child yourself, but this is faster due to not walking the tree).  Preferred output for those not comfortable with doing tail recursion.
 
 =back
 
@@ -1359,6 +1359,7 @@ Returns ARRAYREF describing everything.
 sub dump {
     my ($self,$project,$attachment,$flat) = @_;
     confess("Object parameters must be called by an instance") unless ref($self);
+    confess("Getting attachments not yet implemented") if $attachment;
 
     my $res = $self->_cacheProjectTree($project,$flat);
     return [] if !$res;
@@ -1392,7 +1393,7 @@ sub _cacheProjectTree {
             next if $project && $project ne $projhash->{'name'} && (defined($projhash->{'type'}) && $projhash->{'type'} eq 'project');
         }
 
-        #If Testsuites are not defined, this must be a TS which we have not traversed yet, so go and get it
+        #If TestSuites are not defined, this must be a TS which we have not traversed yet, so go and get it
         if (exists($projhash->{'type'}) && $projhash->{'type'} eq 'project') {
             $projhash->{'testsuites'} = $self->getTLDTestSuitesForProject($projhash->{'id'},$get_tests);
         } else {
@@ -1410,7 +1411,6 @@ sub _cacheProjectTree {
 
     #Keep this for simple searches in the future.
     $self->{'flattree'} = clone \@flattener;
-    my @debuglist = map {$_->{'tests'}} @flattener;
     return $self->{'flattree'} if $flat;
     return $self->_expandTree($project,@flattener);
 }
