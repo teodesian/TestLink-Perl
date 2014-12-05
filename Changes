@@ -1,5 +1,10 @@
 Revision history for Perl module TestLink::API
 
+0.011 2014-12-05 TEODESIAN
+    - Converted to dzil
+    - Fixed various spelling issues in the POD
+    - Removed some orphan vars
+
 0.010 2014-12-03 TEODESIAN
     - Dist name was being set to TestLink::API instead of TestLink-API
     - Added "use 5.010" to document required version of Perl.
