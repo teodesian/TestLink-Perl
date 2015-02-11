@@ -6,7 +6,7 @@ README.md
 .git/*
 .gitignore
 tidyall.ini
-enivronment.sh
+environment.sh
 .build/*
 TestLink-API-*/
 cover/*
