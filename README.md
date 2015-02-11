@@ -1,6 +1,9 @@
 TestLink::API
 =============
 
+<img src="https://travis-ci.org/teodesian/TestLink-Perl.svg" alt="Travis CI build status" />
+<a href='https://coveralls.io/r/teodesian/TestLink-Perl'><img src='https://coveralls.io/repos/teodesian/TestLink-Perl/badge.svg' alt='Coverage Status' /></a>
+
 Perl Interface to TestLink XMLAPI
 ---------------------------------
 
